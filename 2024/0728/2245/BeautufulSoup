@@ -1,0 +1,22 @@
+from pathlib import Path
+from bs4 import BeautifulSoup
+
+# ファイルパスの設定
+hfile = Path(r'C:\Users\yukik\Downloads\Site Map - Site Guide - NCBI.html')
+
+# ファイルの存在を確認
+if not hfile.exists():
+    print(f"File not found: {hfile}")
+else:
+    # ファイルを読み取る
+    htext = hfile.read_text(encoding='utf-8')
+    print(htext)
+#ncbi07/28_22:33
+
+
+   # BeautifulSoupを使用してHTMLを解析
+    soup = BeautifulSoup(htext, 'html.parser')
+    
+    # 解析結果の表示（例として、タイトルを取得して表示）
+    title = soup.title.string if soup.title else "No title found"
+    print(f"Page Title: {title}")
