@@ -1,0 +1,13 @@
+from pathlib import Path
+
+# ファイルパスの設定
+hfile = Path(r'C:\Users\yukik\Downloads\Site Map - Site Guide - NCBI.html')
+
+# ファイルの存在を確認
+if not hfile.exists():
+    print(f"File not found: {hfile}")
+else:
+    # ファイルを読み取る
+    htext = hfile.read_text(encoding='utf-8')
+    print(htext)
+#ncbi07/28_22:33
