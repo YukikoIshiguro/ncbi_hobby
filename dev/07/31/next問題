@@ -1,0 +1,49 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+# WebDriverの設定
+options = Options()
+options.add_argument('--headless')  # ヘッドレスモード（ブラウザを表示しない）
+service = Service(executable_path='C:/Users/yukik/Desktop/chromedriver.exe')  # 正しいChromeDriverのパスを指定
+
+# WebDriverを起動
+driver = webdriver.Chrome(service=service, options=options)
+
+# ターゲットURLにアクセス
+driver.get("https://www.ncbi.nlm.nih.gov/books/?term=eye")
+
+# ページの読み込みを待つ
+time.sleep(3)
+
+# クラス 'title' を持つすべての <p> 要素を取得
+title_elements = driver.find_elements(By.CLASS_NAME, 'title')
+
+# 各タイトルを抽出して表示
+for title_element in title_elements:
+    title_link = title_element.find_element(By.TAG_NAME, 'a')
+    title_text = title_link.text
+    title_href = title_link.get_attribute('href')
+    print(f"書籍タイトル: {title_text}")
+    print(f"リンク: {title_href}")
+
+# 次へボタンをクリック
+try:
+    next_button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.LINK_TEXT, "Next"))  # もしくは "次へ" または他の適切なテキスト
+    )
+    next_button.click()
+
+    # 次のページのURLを取得して表示
+    time.sleep(3)  # 次のページの読み込みを待つ
+    current_url = driver.current_url
+    print(f"次のページのURL: {current_url}")
+except Exception as e:
+    print(f"次へボタンが見つかりません: {e}")
+
+# WebDriverを終了
+driver.quit()
