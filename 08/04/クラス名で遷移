@@ -1,0 +1,223 @@
+import os
+from pathlib import Path
+from bs4 import BeautifulSoup
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+
+# SeleniumのWebDriverを設定
+driver_path = r'C:\Users\yukik\Desktop\chromedriver.exe'  # あなたのchromedriver.exeのパスを指定してください
+service = Service(driver_path)
+driver = webdriver.Chrome(service=service)
+
+# 初期ページを開く
+url = 'file:///C:/Users/yukik/Downloads/皮膚 - 書籍 - NCBI.html'  # ローカルファイルを開くURL形式
+driver.get(url)
+
+titles = []
+links = []
+
+# 繰り返し回数を設定
+max_iterations = 20
+current_iteration = 0
+
+while current_iteration < max_iterations:
+    # ページの内容をBeautifulSoupで解析
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    # 書籍タイトルとリンクを取得
+    new_titles = [a.get_text() for a in soup.select('a[ref]')]
+    new_links = [a['href'] for a in soup.select('a[ref]')]
+
+    titles.extend(new_titles)
+    links.extend(new_links)
+
+    try:
+        # "Next" ボタンがクリック可能になるまで待つ
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, "next"))
+        )
+        next_button.click()
+        current_iteration += 1
+    except Exception as e:
+        # "Next" ボタンが見つからない場合はループを終了
+        print(f"Exception occurred: {e}")
+        break
+
+# ドライバーを閉じる
+driver.quit()
+
+# タイトルとリンクの長さを一致させる
+max_length = max(len(titles), len(links))
+titles.extend([''] * (max_length - len(titles)))
+links.extend([''] * (max_length - len(links)))
+
+# 解析したデータを辞書に保存
+data = {
+    'Title': titles,
+    'Link': links
+}
+
+# データフレームを作成
+df = pd.DataFrame(data)
+
+# 出力ファイルパスをユーザーのドキュメントフォルダに設定
+output_directory = os.path.join(os.path.expanduser('~'), 'Documents')
+output_file_path = os.path.join(output_directory, 'ncbi_result_info.xlsx')
+
+# データフレームをExcelファイルに書き出す
+df.to_excel(output_file_path, index=False, engine='openpyxl')
+
+print(f"Excelファイル '{output_file_path}' に保存されたよ！")
+#import os
+from pathlib import Path
+from bs4 import BeautifulSoup
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+
+# SeleniumのWebDriverを設定
+driver_path = r'C:\Users\yukik\Desktop\chromedriver.exe'  # あなたのchromedriver.exeのパスを指定してください
+service = Service(driver_path)
+driver = webdriver.Chrome(service=service)
+
+# 初期ページを開く
+url = 'file:///C:/Users/yukik/Downloads/皮膚 - 書籍 - NCBI.html'  # ローカルファイルを開くURL形式
+driver.get(url)
+
+titles = []
+links = []
+
+# 繰り返し回数を設定
+max_iterations = 20
+current_iteration = 0
+
+while current_iteration < max_iterations:
+    # ページの内容をBeautifulSoupで解析
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    # 書籍タイトルとリンクを取得
+    new_titles = [a.get_text() for a in soup.select('a[ref]')]
+    new_links = [a['href'] for a in soup.select('a[ref]')]
+
+    titles.extend(new_titles)
+    links.extend(new_links)
+
+    try:
+        # "Next" ボタンがクリック可能になるまで待つ
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, "next"))
+        )
+        next_button.click()
+        current_iteration += 1
+    except Exception as e:
+        # "Next" ボタンが見つからない場合はループを終了
+        print(f"Exception occurred: {e}")
+        break
+
+# ドライバーを閉じる
+driver.quit()
+
+# タイトルとリンクの長さを一致させる
+max_length = max(len(titles), len(links))
+titles.extend([''] * (max_length - len(titles)))
+links.extend([''] * (max_length - len(links)))
+
+# 解析したデータを辞書に保存
+data = {
+    'Title': titles,
+    'Link': links
+}
+
+# データフレームを作成
+df = pd.DataFrame(data)
+
+# 出力ファイルパスをユーザーのドキュメントフォルダに設定
+output_directory = os.path.join(os.path.expanduser('~'), 'Documents')
+output_file_path = os.path.join(output_directory, 'ncbi_result_info.xlsx')
+
+# データフレームをExcelファイルに書き出す
+df.to_excel(output_file_path, index=False, engine='openpyxl')
+
+print(f"Excelファイル '{output_file_path}' に保存されたよ！")
+#import os
+from pathlib import Path
+from bs4 import BeautifulSoup
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+
+# SeleniumのWebDriverを設定
+driver_path = r'C:\Users\yukik\Desktop\chromedriver.exe'  # あなたのchromedriver.exeのパスを指定してください
+service = Service(driver_path)
+driver = webdriver.Chrome(service=service)
+
+# 初期ページを開く
+url = 'file:///C:/Users/yukik/Downloads/皮膚 - 書籍 - NCBI.html'  # ローカルファイルを開くURL形式
+driver.get(url)
+
+titles = []
+links = []
+
+# 繰り返し回数を設定
+max_iterations = 20
+current_iteration = 0
+
+while current_iteration < max_iterations:
+    # ページの内容をBeautifulSoupで解析
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    # 書籍タイトルとリンクを取得
+    new_titles = [a.get_text() for a in soup.select('a[ref]')]
+    new_links = [a['href'] for a in soup.select('a[ref]')]
+
+    titles.extend(new_titles)
+    links.extend(new_links)
+
+    try:
+        # "Next" ボタンがクリック可能になるまで待つ
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, "next"))
+        )
+        next_button.click()
+        current_iteration += 1
+    except Exception as e:
+        # "Next" ボタンが見つからない場合はループを終了
+        print(f"Exception occurred: {e}")
+        break
+
+# ドライバーを閉じる
+driver.quit()
+
+# タイトルとリンクの長さを一致させる
+max_length = max(len(titles), len(links))
+titles.extend([''] * (max_length - len(titles)))
+links.extend([''] * (max_length - len(links)))
+
+# 解析したデータを辞書に保存
+data = {
+    'Title': titles,
+    'Link': links
+}
+
+# データフレームを作成
+df = pd.DataFrame(data)
+
+# 出力ファイルパスをユーザーのドキュメントフォルダに設定
+output_directory = os.path.join(os.path.expanduser('~'), 'Documents')
+output_file_path = os.path.join(output_directory, 'ncbi_result_info.xlsx')
+
+# データフレームをExcelファイルに書き出す
+df.to_excel(output_file_path, index=False, engine='openpyxl')
+
+print(f"Excelファイル '{output_file_path}' に保存されたよ！")
+#"Next" ボタンのクリック可能になる条件を By.LINK_TEXT から By.CLASS_NAME に変更したコードです。これにより、クラス名が "next" のボタンをクリックするようになります。
